@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
-import math
 
 from modelos.mm1 import open_mm1_interface
 from modelos.mmk import open_mmk_interface
