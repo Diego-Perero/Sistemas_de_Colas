@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import math
 
-def open_results_interface(model, utilization, wq, ws, lq, ls, idle_prob, lam, mu):
+def open_results_interface(model, utilization, wq, ws, lq, ls, idle_prob, lam, mu, k=None, f=None):
     def open_waiting_probabilities_interface():
         def calculate_waiting_probability():
             try:
@@ -13,8 +13,21 @@ def open_results_interface(model, utilization, wq, ws, lq, ls, idle_prob, lam, m
                     return
 
                 # Calcular las probabilidades de espera
-                P_W_t = math.exp(-(mu - lam) * t)
-                P_Wq_t = utilization * math.exp(-(mu - lam) * t)
+                if model == "M/M/1":
+                    P_W_t = math.exp(-(mu - lam) * t)
+                    P_Wq_t = utilization * math.exp(-(mu - lam) * t)
+                elif model == "M/M/K":
+                    # Fórmulas para M/M/K
+                    P_W_t = ...  # Ajustar fórmula
+                    P_Wq_t = ...  # Ajustar fórmula
+                elif model == "M/G/1":
+                    # Fórmulas para M/G/1
+                    P_W_t = ...  # Ajustar fórmula
+                    P_Wq_t = ...  # Ajustar fórmula
+                elif model == "M/M/K/F":
+                    # Fórmulas para M/M/K/F
+                    P_W_t = ...  # Ajustar fórmula
+                    P_Wq_t = ...  # Ajustar fórmula
 
                 # Mostrar los resultados
                 result_label.config(text=f"Probabilidad de esperar más de {t} minutos en el sistema: {P_W_t:.4f}")
@@ -40,7 +53,6 @@ def open_results_interface(model, utilization, wq, ws, lq, ls, idle_prob, lam, m
         result_queue_label.grid(row=3, column=0, columnspan=2, pady=10)
 
     def open_probabilities_interface():
-        
         def calculate_probabilities():
             try:
                 n = int(prob_entry.get())
@@ -71,7 +83,17 @@ def open_results_interface(model, utilization, wq, ws, lq, ls, idle_prob, lam, m
                 # Calcular probabilidades
                 prob_sum = 0
                 for i in range(n + 1):
-                    prob = (lam / mu) ** i * (1 - lam / mu)
+                    if model == "M/M/1":
+                        prob = (lam / mu) ** i * (1 - lam / mu)
+                    elif model == "M/M/K":
+                        # Fórmulas para M/M/K
+                        prob = ...  # Ajustar fórmula
+                    elif model == "M/G/1":
+                        # Fórmulas para M/G/1
+                        prob = ...  # Ajustar fórmula
+                    elif model == "M/M/K/F":
+                        # Fórmulas para M/M/K/F
+                        prob = ...  # Ajustar fórmula
                     prob_sum += prob
                     prob_sumn = 1 - prob_sum  # suma total
                     tree.insert("", "end", values=(i, f"{prob:.4f}", f"{prob_sum:.4f}"))
@@ -85,8 +107,7 @@ def open_results_interface(model, utilization, wq, ws, lq, ls, idle_prob, lam, m
         probabilities_window = tk.Toplevel()
         probabilities_window.title("Calcular Probabilidades")
 
-        ttk.Label(probabilities_window, text="Ingrese el número de estados (n):").grid(row=0, column=0, padx=10,
-                                                                                       pady=10)
+        ttk.Label(probabilities_window, text="Ingrese el número de estados (n):").grid(row=0, column=0, padx=10, pady=10)
         prob_entry = ttk.Entry(probabilities_window)
         prob_entry.grid(row=0, column=1, padx=10, pady=10)
 
@@ -118,7 +139,13 @@ def open_results_interface(model, utilization, wq, ws, lq, ls, idle_prob, lam, m
     if idle_prob is not None:
         results.append(("Probabilidad de sistema desocupado", f"{idle_prob:.2%}"))
 
-    if model == "M/M/1":
+    # if model == "M/M/K/F":
+        # Añadir métricas específicas para M/M/K/F
+        # results.append(("Probabilidad de rechazo (P_rechazo)", f"{idle_prob:.2%}"))
+        # results.append(("Número promedio de clientes en el sistema (L)", f"{ls:.2f}"))
+        # results.append(("Tiempo promedio en el sistema (W)", f"{ws:.2f} minutos"))
+
+    if model in ["M/M/1", "M/M/K", "M/G/1", "M/M/K/F"]:
         waiting_prob_button = ttk.Button(results_window, text="Calcular Probabilidad de Esperar Más de X Minutos",
                                          command=open_waiting_probabilities_interface)
         waiting_prob_button.grid(row=2, column=0, padx=10, pady=10)
@@ -131,4 +158,3 @@ def open_results_interface(model, utilization, wq, ws, lq, ls, idle_prob, lam, m
         tree.insert("", "end", values=(metric, result))
 
     tree.pack(padx=10, pady=10)
-

@@ -73,7 +73,7 @@ def open_mmkf_interface():
             ws = wq + (1 / mu)  # Tiempo promedio en el sistema
 
             # Mostrar resultados
-            open_results_interface("M/M/K/F", rho, wq, ws, lq, ls, p_f, lam, mu)
+            open_results_interface("M/M/K/F", rho, wq, ws, lq, ls, p_f, lam, mu, k, f)
         except ValueError:
             messagebox.showerror("Error", "Por favor, ingrese valores numéricos válidos.")
         except Exception as e:
