@@ -40,6 +40,7 @@ def open_results_interface(model, utilization, wq, ws, lq, ls, idle_prob, lam, m
         result_queue_label.grid(row=3, column=0, columnspan=2, pady=10)
 
     def open_probabilities_interface():
+        
         def calculate_probabilities():
             try:
                 n = int(prob_entry.get())
