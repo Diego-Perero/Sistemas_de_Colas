@@ -33,47 +33,41 @@ def open_mmkf_interface():
             k = int(entries[2].get())
             f = int(entries[3].get())
 
-            # Validaciones
-            if lam <= 0 or mu <= 0:
-                messagebox.showerror("Error", "λ y μ deben ser mayores que 0.")
-                return
-            if k <= 0 or f <= 0:
-                messagebox.showerror("Error", "K y F deben ser números enteros positivos.")
-                return
-            if f < k:
-                messagebox.showerror("Error", "F debe ser mayor o igual que K.")
-                return
             if lam >= k * mu:
-                messagebox.showerror("Error", "El sistema no es estable. λ debe ser menor que K * μ.")
+                messagebox.showerror("Error", "La tasa de llegada debe ser menor que K * μ.")
                 return
 
-            # Probabilidades de estado
+            # Factor de utilización
             rho = lam / mu
-            p0 = 0
+            utilization = rho / k
 
-            # Suma para estados 0 a K-1
-            for n in range(k):
-                p0 += (rho ** n) / math.factorial(n)
+            # Probabilidad de que no haya clientes en el sistema (P0)
+            p0_sum = sum((rho ** n) / math.factorial(n) for n in range(k))
+            p0_sum += sum((rho ** n) / (math.factorial(k) * (k ** (n - k))) for n in range(k, f + 1))
+            p0 = 1 / p0_sum
 
-            # Suma para estados K a F
-            for n in range(k, f + 1):
-                p0 += (rho ** n) / (math.factorial(k) * (k ** (n - k)))
-            p0 = 1 / p0  # Probabilidad de que no haya clientes en el sistema
+            # Probabilidad de que el sistema esté lleno (P(F))
+            pf = (rho ** f) / (math.factorial(k) * (k ** (f - k))) * p0
 
-            # Probabilidad de rechazo (estado F lleno)
-            p_f = (rho ** f) / (math.factorial(k) * (k ** (f - k))) * p0
+            # Número promedio de clientes en la cola (Lq)
+            if lam / (k * mu) < 1:
+                lq = (p0 * ((rho ** k) * (lam / (k * mu)) / (math.factorial(k) * (1 - lam / (k * mu)) ** 2)) *
+                    (1 - (lam / (k * mu)) ** (f - k + 1) - (1 - lam / (k * mu)) * (f - k + 1) * (lam / (k * mu)) ** (f - k)))
+            else:
+                lq = 0
 
-            # Probabilidad de que todos los servidores estén ocupados
-            pw = ((rho ** k) / math.factorial(k)) * (1 - (rho / k) ** (f - k + 1)) / (1 - (rho / k)) * p0
+            # Número promedio de clientes en el sistema (Ls)
+            ls = lq + (lam / mu) * (1 - pf)
 
-            # Rendimiento
-            lq = pw * (rho / k) / (1 - (rho / k))  # Número promedio en la cola
-            ls = lq + (rho * (1 - p_f))  # Número promedio en el sistema
-            wq = lq / (lam * (1 - p_f))  # Tiempo promedio en la cola
-            ws = wq + (1 / mu)  # Tiempo promedio en el sistema
+            # Tiempo promedio en la cola (Wq)
+            wq = lq / (lam * (1 - pf))
+
+            # Tiempo promedio en el sistema (Ws)
+            ws = wq + (1 / mu)
 
             # Mostrar resultados
-            open_results_interface("M/M/K/F", rho, wq, ws, lq, ls, p_f, lam, mu, k, f)
+            open_results_interface("M/M/K/F", utilization, wq, ws, lq, ls, pf, p0, lam, mu, k, f)
+
         except ValueError:
             messagebox.showerror("Error", "Por favor, ingrese valores numéricos válidos.")
         except Exception as e:

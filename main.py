@@ -10,10 +10,10 @@ from modelos.mmkf import open_mmkf_interface
 def main():
     root = tk.Tk()
     root.title("Seleccionar un Modelo")
-    root.geometry("400x200")
+    root.geometry("400x175")
 
     frame = tk.Frame(root)
-    frame.pack(pady=20)
+    frame.pack(pady=10)
 
     title_label = ttk.Label(frame, text="Título del Problema:")
     title_label.grid(row=0, column=0, padx=5, pady=5, sticky="e")
@@ -42,10 +42,10 @@ def main():
             messagebox.showinfo("Información", f"El modelo {seleccion} no está implementado.")
 
     boton_ok = ttk.Button(root, text="Ok", command=manejar_seleccion)
-    boton_ok.pack(pady=10)
+    boton_ok.pack(pady=5)
 
     boton_cancelar = ttk.Button(root, text="Cancelar", command=root.destroy)
-    boton_cancelar.pack(pady=10)
+    boton_cancelar.pack(pady=0)
 
     root.mainloop()
 
