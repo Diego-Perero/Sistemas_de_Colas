@@ -40,7 +40,7 @@ def open_mg1_interface():
             lq = lam * wq
             ls = lam * ws
 
-            open_results_interface("M/G/1", utilization, wq, ws, lq, ls, None, lam, mu)
+            open_results_interface("M/G/1", utilization, wq, ws, lq, ls, None, None, lam, mu)
         except ValueError:
             messagebox.showerror("Error", "Por favor, ingrese valores numéricos válidos.")
 

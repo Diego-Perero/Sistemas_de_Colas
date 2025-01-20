@@ -38,9 +38,9 @@ def open_mm1_interface():
             ws = wq + (1 / mu)
             lq = lam * wq
             ls = lam * ws
-            idle_prob = 1 - utilization
+            p0 = 1 - utilization
 
-            open_results_interface("M/M/1", utilization, wq, ws, lq, ls, idle_prob, lam, mu)
+            open_results_interface("M/M/1", utilization, wq, ws, lq, ls, p0, None, lam, mu)
         except ValueError:
             messagebox.showerror("Error", "Por favor, ingrese valores numéricos válidos.")
 

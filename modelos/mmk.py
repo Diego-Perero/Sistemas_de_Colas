@@ -51,7 +51,7 @@ def open_mmk_interface():
             ls = lam * ws
 
             # Ahora pasamos lam y mu a open_results_interface
-            open_results_interface("M/M/K", utilization, wq, ws, lq, ls, None, lam, mu)
+            open_results_interface("M/M/K", utilization, wq, ws, lq, ls, None, None, lam, mu)
         except ValueError:
             messagebox.showerror("Error", "Por favor, ingrese valores numéricos válidos.")
         except Exception as e:

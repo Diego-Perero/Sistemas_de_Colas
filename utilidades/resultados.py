@@ -138,20 +138,20 @@ def open_results_interface(model, utilization, wq, ws, lq, ls, p0, pf, lam, mu, 
     ]
 
     if model == "M/M/K/F":
-        # Añadir métricas específicas para M/M/K/F
+        # Métricas específicas para M/M/K/F
         results.append(("Probabilidad de sistema vacío (P0)", f"{p0:.4%}")),
         results.append(("Probabilidad de sistema lleno (Pf)", f"{pf:.4%}"))
 
     for metric, result in results:
         tree.insert("", "end", values=(metric, result))
 
-    tree.pack(padx=10, pady=10)
+    tree.pack(padx=10, pady=5)
 
     if model in ["M/M/1"]:
         waiting_prob_button = ttk.Button(results_window, text="Calcular Probabilidad de Esperar Más de X Minutos",
                                          command=open_waiting_probabilities_interface)
-        waiting_prob_button.grid(row=2, column=0, padx=10, pady=10)
+        waiting_prob_button.grid(row=2, column=0, padx=10, pady=5)
 
         prob_button = ttk.Button(results_window, text="Calcular Probabilidades de Estado",
                                  command=open_probabilities_interface)
-        prob_button.grid(row=3, column=0, padx=10, pady=10)
+        prob_button.grid(row=3, column=0, padx=10, pady=15)
